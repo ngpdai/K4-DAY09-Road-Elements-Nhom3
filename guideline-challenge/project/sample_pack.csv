@@ -14,9 +14,4 @@ BDD08,calibration,edge;occlusion,highway daytime - partial occlusion by tree
 000001,blind,normal;occlusion,street daytime - 2 circle lights on main pole
 000002,blind,edge;conflict,intersection gantry - multiple housing units
 000003,blind,edge;small_far,distant intersection - small/far lights size threshold
-000004,blind,edge;ambiguity,complex intersection - multiple lights state identification
-000005,blind,critical;conflict,multi-lane intersection - red arrow vs green circle
-000006,blind,normal;occlusion,street daytime - green light near tree/bus
 000007,blind,critical;ambiguity,street daytime - dual green lights lane relevance
-000008,blind,normal,main road - dual lights with countdown
-000009,blind,critical;edge,distant cluster - 3 separate housings on/off
