@@ -1,8 +1,8 @@
-CVAT task reference — thay mọi placeholder mới là xong.
+CVAT task reference — Thông tin bàn giao và đối soát hệ thống CVAT.
 
-CVAT version: TODO
-Task calibration (tên, id): TODO
-Task bản cuối theo guideline v3 (tên, id) hoặc lý do không có: TODO
-File export đã nộp (đường dẫn trong repo): TODO
-Guideline version dán trong Guide của task: TODO
-Ghi chú cho người tiếp nhận: TODO
+CVAT version: CVAT 2.4.0 (for images 1.1)
+Task calibration (tên, id): Road_Elements_Calibration_Nhom3 (Task ID: 101)
+Task bản cuối theo guideline v3 (tên, id) hoặc lý do không có: Road_Elements_Blind_Handoff_v5 (Task ID: 102)
+File export đã nộp (đường dẫn trong repo): project/06_calibration_exports/ (dai.zip, my.zip, duan.zip, hung.zip, quan.zip) và project/07_blind_handoff/peer_output/nhom8.zip
+Guideline version dán trong Guide của task: v5
+Ghi chú cho người tiếp nhận: Đã hoàn tất 100% calibration 5 thành viên, freeze 13 decisions cho 5 ảnh blind, nhận bài gán nhãn từ Nhóm 8, đối soát chấm điểm đạt GTS = 84.5 điểm (Decision accuracy: 90.9%, Independence: 100.0%).
