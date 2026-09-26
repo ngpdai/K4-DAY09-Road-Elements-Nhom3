@@ -1,12 +1,17 @@
 sample_id,split,tags,reason
-BDD01,calibration,normal,traffic light daytime highway - baseline agreement check
-BDD02,calibration,normal,traffic light daytime city street - baseline agreement check
-BDD03,calibration,normal,traffic light overcast highway - baseline agreement check
-BDD04,calibration,edge,traffic light daytime city street - relevance ambiguity test
-BDD05,calibration,normal,traffic light daytime highway - count agreement check
-BDD06,example,normal,clear daytime highway - straightforward ego_lane case for guideline illustration
-BDD07,example,edge,overcast highway - multiple lights in frame edge case
-BDD08,example,edge,clear daytime highway - occlusion/relevance ambiguity illustration
+000000,calibration,normal,traffic light daytime - multi-lane intersection relevance check
+000001,calibration,normal,traffic light daytime - baseline count and state agreement
+000002,calibration,edge,traffic light daytime - relevance ambiguity at intersection (ego vs other)
+000003,calibration,edge,traffic light daytime - count disagreement for distant lights + state ambiguity
+000004,calibration,edge,traffic light daytime - complex scene 7 lights state and relevance
+000005,calibration,normal,traffic light daytime - 3 lights relevance split check
+000006,calibration,normal,traffic light daytime - 2 lights consensus baseline
+000007,calibration,normal,traffic light daytime - full consensus control image
+000008,calibration,normal,traffic light daytime - full consensus control image 2
+000009,calibration,edge,traffic light daytime - count disagreement hung missed 3 distant lights
+BDD11,example,normal,overcast daytime city street - standard ego_lane illustration for guideline
+BDD12,example,edge,overcast daytime city street - relevance ambiguity example with multiple lights
+BDD15,example,normal;ambiguity,clear daytime city street - escalation example when relevance undeterminable
 BDD13,blind,normal,clear daytime city street - standard multi-light scenario
 BDD17,blind,edge;low_visibility,rainy daytime city street - reduced visibility affects state detection
 BDD18,blind,critical;low_visibility,clear night city street - glare/halo geometry + relevance ambiguity under low light

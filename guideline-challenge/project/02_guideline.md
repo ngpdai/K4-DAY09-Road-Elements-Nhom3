@@ -1,6 +1,6 @@
 # Annotation guideline — Traffic Light State & Ego-Relevance
 
-**Version:** v4
+**Version:** v5
 
 ## 1. Objective + scope
 
