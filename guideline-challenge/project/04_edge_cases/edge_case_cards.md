@@ -15,121 +15,119 @@ File này là kho nội bộ của nhóm, **không gửi cho peer**. Card dùng 
 ---
 
 CASE ID: EC-01
-Sample: BDD07 (example)
-Scene: Overcast daytime highway — nhiều đầu đèn song song trên một cột
-Observation: Một cột đèn có 3 đầu: 1 mũi tên rẽ trái (arrow) + 2 hình tròn (circle). Cả ba cùng màu xanh.
-Decision: LABEL — vẽ 3 bounding box riêng biệt
-Expected: label=traffic_light x3; đầu arrow: shape=arrow, relevance=other_lane; hai đầu circle: shape=circle, relevance=ego_lane; state=green cho cả 3
-Rationale: Mục 2 quy định mỗi đầu đèn vật lý riêng biệt là một instance. Gộp chung → count sai → downstream bỏ sót tín hiệu rẽ trái.
-Common mistake: Vẽ 1 box lớn bao cả 3 đầu, hoặc gán relevance=ego_lane cho đầu arrow rẽ trái.
-Diversity: ambiguity (multiple lights), conflict (relevance phân biệt)
+Sample: 000000 (sample_id)
+Scene: Giao lộ đô thị, nhiều traffic-light head nằm cạnh nhau trên cùng hướng tiếp cận.
+Observation: Một đầu đèn hiển thị mũi tên rẽ trái màu đỏ, bên cạnh là một đầu đèn hình tròn màu đỏ. Hai đầu đèn có cùng trạng thái màu nhưng phục vụ các hướng di chuyển khác nhau.
+Decision: LABEL
+Expected: Tạo 2 bounding box độc lập, mỗi box ôm housing của một traffic-light head. Đèn mũi tên: class=traffic_light, state=red, shape=arrow, relevance=other_lane nếu ego đi thẳng. Đèn tròn: class=traffic_light, state=red, shape=circle, relevance=ego_lane nếu nó điều khiển luồng đi thẳng của ego.
+Rationale: Đây là case kiểm tra việc không suy ra relevance từ state. Hai đèn cùng màu đỏ nhưng có thể điều khiển hai traffic flow khác nhau. Gán nhầm đèn rẽ cho ego có thể làm downstream hiểu sai tín hiệu mà ego phải tuân theo.
+Common mistake: Gộp hai đầu đèn thành một box hoặc gán cả hai relevance=ego_lane chỉ vì cả hai đều màu đỏ.
+Diversity: conflict / critical / multiple_instances
 
 ---
 
 CASE ID: EC-02
-Sample: BDD08 (example)
-Scene: Clear daytime highway — đèn bị cành cây che một phần
-Observation: Đầu đèn bị nhánh cây che ~30% diện tích vỏ bên trên; bóng đèn đỏ vẫn nhìn thấy rõ.
-Decision: LABEL — vẽ box ôm phần vỏ nhìn thấy
-Expected: label=traffic_light; state=red; box ôm phần vỏ visible (không kéo dài ra phần bị che); relevance=ego_lane
-Rationale: Mục 6 — bị che <50% và đèn phát sáng → vẽ box phần visible. Bỏ qua = critical escape.
-Common mistake: Bỏ qua vì nghĩ "bị che = không label" hoặc kéo box bao luôn phần bị cành cây che.
-Diversity: occlusion
+Sample: 000005 (sample_id)
+Scene: Cùng kiểu giao lộ nhiều đầu đèn, với một đèn mũi tên rẽ trái màu đỏ và một đèn tròn màu xanh. Ego đang tiếp cận giao lộ theo hướng đi thẳng.
+Observation: Đèn rẽ trái đang đỏ trong khi đèn tròn bên cạnh đang xanh.
+Decision: LABEL
+Expected: Đèn mũi tên: class=traffic_light, state=red, shape=arrow, relevance=other_lane. Đèn tròn: class=traffic_light, state=green, shape=circle, relevance=ego_lane. Hai housing được vẽ thành hai bounding box riêng.
+Rationale: Đây là critical-risk case vì trạng thái của hai traffic flow khác nhau tại cùng một vị trí. Nếu annotator gán đèn rẽ trái cho ego, downstream có thể nhận sai tín hiệu điều khiển luồng của ego.
+Common mistake: Thấy đèn xanh nằm gần đèn đỏ rồi gán relevance theo vị trí gần ego thay vì xác định traffic flow; hoặc gán tất cả đèn nhìn về camera là ego_lane.
+Diversity: conflict / critical / multiple_instances
 
 ---
 
 CASE ID: EC-03
-Sample: BDD18 (blind)
-Scene: Clear night city street — đèn tạo quầng sáng lóa (glare/halo)
-Observation: Đèn đỏ ban đêm tạo vầng sáng lan rộng gấp 3–4 lần kích thước thực. Khó phân biệt mép vỏ đèn.
-Decision: LABEL — box căn theo vỏ đèn ước lượng, KHÔNG theo quầng sáng
-Expected: label=traffic_light; geometry: box kích thước ước lượng vỏ thực ≈ kích thước đèn ban ngày cùng loại; state=red; relevance=ego_lane hoặc ambiguous
-Rationale: Mục 6 — ban đêm glare box phải căn theo kích thước vỏ đèn thực tế. Box theo quầng sáng làm detector học sai kích thước object.
-Common mistake: Kéo box bao toàn bộ quầng sáng (box phình 3–4× so với vỏ đèn thực); hoặc bỏ qua vì không thấy rõ mép.
-Diversity: low_visibility, critical (geometry critical)
+Sample: 000002 (sample_id)
+Scene: Gantry ngang đường với nhiều traffic-light head ở nhiều vị trí, một số đầu đèn có mũi tên và một số đầu đèn hình tròn.
+Observation: Nhiều đầu đèn xuất hiện đồng thời, khoảng cách giữa các housing nhỏ; một số cùng hiển thị màu đỏ nhưng hình dạng tín hiệu khác nhau.
+Decision: LABEL
+Expected: Mỗi housing độc lập là một instance và một bounding box riêng. Không gộp các housing trên cùng gantry. State được xác định riêng cho từng box; shape=arrow nếu tín hiệu mũi tên, shape=circle nếu tín hiệu tròn; relevance được xác định độc lập theo traffic flow.
+Rationale: Guideline quy định mỗi traffic-light housing độc lập là một instance. Việc gộp các đầu đèn làm mất thông tin về state/shape/relevance của từng tín hiệu.
+Common mistake: Vẽ một bounding box lớn bao trọn toàn bộ gantry hoặc gộp các đầu đèn nằm cạnh nhau.
+Diversity: multiple_instances / conflict / geometry
 
 ---
 
 CASE ID: EC-04
-Sample: BDD18 (blind)
-Scene: Clear night city street — mất vạch kẻ đường trong bóng tối
-Observation: Hai cột đèn gần nhau, một bên có mũi tên rẽ phải, một bên tròn. Vạch phân làn mờ hoàn toàn trong bóng tối.
-Decision: ESCALATE — relevance=ambiguous cho cả hai đầu đèn tròn
-Expected: label=traffic_light x2+ ; đầu tròn: relevance=ambiguous; đầu arrow rẽ phải: relevance=other_lane (arrow chỉ rõ làn)
-Rationale: Mục 7 — không đủ bằng chứng xác định làn nào là ego lane → ambiguous. Downstream kích hoạt safe mode.
-Common mistake: Đoán mò ego_lane vì xe đang đi thẳng; hoặc gán other_lane cho đèn tròn không có mũi tên.
-Diversity: critical, escalation, low_visibility, ambiguity
+Sample: 000001 (sample_id)
+Scene: Giao lộ có nhiều cây; một số traffic-light head nằm sát hoặc bị che một phần bởi tán cây và phương tiện lớn.
+Observation: Một số housing vẫn nhận diện được nhưng background cây che một phần hình dạng/housing; một traffic-light head ở bên phải nằm gần xe bus.
+Decision: LABEL
+Expected: Với traffic-light head vẫn nhận diện được và đủ evidence, tạo bounding box ôm phần housing nhìn thấy. Không mở rộng box vào vùng cây/xe bus bị che. State lấy từ bóng đèn nếu màu đủ rõ; nếu không xác định được màu thì state=unknown.
+Rationale: Annotator phải phân biệt “object bị occlusion” với “object không còn đủ evidence để annotate”. Không được tự đoán phần housing bị che.
+Common mistake: Kéo box qua vùng cây để ước lượng toàn bộ housing hoặc bỏ qua object dù vẫn có đủ evidence nhận diện.
+Diversity: occlusion
 
 ---
 
 CASE ID: EC-05
-Sample: BDD17 (blind)
-Scene: Rainy daytime city street — mưa tạo streaks trên kính
-Observation: Vệt mưa chạy dọc qua đầu đèn; màu đèn nhìn thấy nhưng bị khuếch tán. Flare nước nhỏ quanh bóng đèn.
-Decision: LABEL — vẽ box theo vỏ đèn, không bao vệt mưa
-Expected: label=traffic_light; box ôm vỏ đèn ±2px (không kéo theo vệt mưa); state=green hoặc red nếu màu phân biệt được; nếu không rõ: state=unknown
-Rationale: Mục 3 — tolerance ±2px. Vệt mưa là artifact, không thuộc vỏ đèn. Mục 6 — nếu màu bị khuếch tán hoàn toàn dùng unknown (đèn đang hoạt động nhưng không đọc được màu); dùng off chỉ khi xác định được đèn tắt hẳn.
-Common mistake: Kéo box dọc theo vệt mưa; hoặc đoán màu xanh vì "đang giờ xanh" dù không thấy rõ.
-Diversity: low_visibility, edge, geometry
+Sample: 000006 (sample_id)
+Scene: Hai traffic-light head màu xanh ở hai phía của cùng đoạn đường, phía dưới có nhiều phương tiện và biển báo giao thông.
+Observation: Một traffic-light head có housing nhìn khá rõ; đầu còn lại chỉ có phần tín hiệu phát sáng nổi bật trong vùng cây, housing khó quan sát.
+Decision: LABEL / ESCALATE tùy mức evidence
+Expected: Nếu đủ evidence xác định phần phát sáng thuộc một traffic-light head trong scope: tạo box theo phần housing nhìn thấy và state=green. Nếu không đủ evidence xác định chính xác housing hoặc không thể phân biệt object với vùng sáng/background: không tự suy đoán; xử lý theo ambiguity/escalation rule.
+Rationale: Đây là ranh giới giữa “known object with partial occlusion” và “insufficient evidence”. Nếu annotator không thể chứng minh object là traffic_light thì không được tạo label chỉ dựa trên một vùng sáng.
+Common mistake: Nhìn thấy một đốm xanh là lập tức tạo traffic_light; hoặc ngược lại bỏ qua object dù housing vẫn đủ evidence.
+Diversity: occlusion / ambiguity / escalation
 
 ---
 
 CASE ID: EC-06
-Sample: BDD24 (blind)
-Scene: Snowy daytime city street — tuyết khuếch tán ánh sáng
-Observation: Tuyết rơi + đọng tạo màu trắng đục phủ kính camera. Đầu đèn nhìn thấy nhưng màu bị wash-out (chỉ thấy điểm sáng trắng).
-Decision: LABEL với state=unknown nếu không phân biệt được màu; hoặc state đúng nếu thấy rõ; state=off chỉ khi xác định được cả cụm tắt hẳn
-Expected: label=traffic_light; state=unknown (nếu tuyết làm mờ màu hoàn toàn) HOẶC state=red/green (nếu thấy rõ qua tuyết) HOẶC state=off (nếu xác định đèn tắt hẳn); không đoán màu từ ngữ cảnh thời điểm.
-Rationale: Mục 4 — unknown khi không xác định đáng tin cậy màu đang sáng; off khi cụm đèn tắt hoàn toàn. Mục 1 — không tự suy đoán màu từ context.
-Common mistake: Gán green vì "ban ngày giờ cao điểm có đèn xanh"; bỏ qua object vì "không thấy rõ".
-Diversity: low_visibility, edge, small_far
+Sample: 000003 (sample_id)
+Scene: Giao lộ nhìn từ xa, nhiều traffic-light head ở các khoảng cách khác nhau; một số đầu đèn ở xa có kích thước rất nhỏ.
+Observation: Có traffic-light head rõ ở foreground và các đầu đèn nhỏ hơn ở background.
+Decision: LABEL hoặc IGNORE theo kích thước thực tế
+Expected: Traffic-light head có kích thước >=12×12 px và đủ evidence → LABEL. Đối tượng <12×12 px → IGNORE theo guideline v4.
+Rationale: Các object rất nhỏ có thể không đủ thông tin để xác định state/shape/relevance đáng tin cậy. Threshold 12×12 px được guideline dùng để tạo boundary nhất quán giữa label và ignore.
+Common mistake: Vẫn annotate các điểm sáng rất nhỏ ở xa chỉ vì chúng có màu đỏ/xanh.
+Diversity: small_far
 
 ---
 
 CASE ID: EC-07
-Sample: BDD25 (blind)
-Scene: Clear dawn/dusk city street — ánh sáng vàng nghiêng xóa vạch kẻ đường
-Observation: Ánh mặt trời thấp chiếu xéo tạo bóng dài. Vạch phân làn gần như biến mất trong ánh sáng vàng. Hai đầu đèn cạnh nhau: 1 arrow trái + 1 tròn.
-Decision: relevance=ambiguous cho đầu đèn tròn vì không xác định được làn xe chủ
-Expected: đầu arrow rẽ trái: relevance=other_lane (mũi tên đã chỉ rõ hướng); đầu tròn: relevance=ambiguous (không rõ điều khiển làn nào khi mất vạch)
-Rationale: Mục 7 — ambiguous khi không đủ bằng chứng xác định làn. Mũi tên vẫn là bằng chứng rõ ràng dù mất vạch.
-Common mistake: Gán ego_lane cho tất cả vì xe đang đi thẳng; hoặc gán ambiguous cả arrow khi mũi tên thấy rõ.
-Diversity: ambiguity, escalation, edge, conflict
+Sample: 000004 (sample_id)
+Scene: Giao lộ lớn với nhiều traffic-light head ở nhiều khoảng cách và nhiều hướng; có cả đèn đang sáng và housing tối.
+Observation: Nhiều tín hiệu nằm chồng trong cùng vùng nhìn; một số đèn xanh, một số đèn đỏ, một số housing tối/khó xác định trạng thái.
+Decision: LABEL / UNKNOWN / IGNORE tùy từng instance
+Expected: Mỗi housing đủ evidence được tạo một box riêng. Đèn có màu xác định → state=red/yellow/green. Nếu housing xác định rõ là traffic light và toàn bộ bóng bên trong tắt hoàn toàn → state=off. Nếu xác định được traffic light nhưng không thể xác định đáng tin cậy màu/trạng thái từ ảnh → state=unknown. Đối tượng <12×12 px hoặc không đủ evidence xác định là traffic light → IGNORE.
+Rationale: Case này kiểm tra rằng state được quyết định trên từng instance, đồng thời phân biệt rõ `off` (biết chắc toàn bộ bóng tắt) với `unknown` (không đủ evidence để xác định màu/trạng thái).
+Common mistake: Gán state của đèn gần đó cho housing tối; gán `unknown` cho một housing rõ ràng đang tắt; hoặc mặc định housing tối là red/green.
+Diversity: ambiguity / multiple_instances / off / unknown
 
 ---
 
 CASE ID: EC-08
-Sample: BDD13 (blind)
-Scene: Clear daytime city street — đèn nhỏ/xa trong khung hình
-Observation: Bên cạnh đèn gần rõ có thêm 2 đầu đèn nhỏ ở xa đường (~40×15px), khó phân biệt shape và state.
-Decision: LABEL nếu ≥12×12px; IGNORE nếu <12×12px
-Expected: đầu đèn gần: label đầy đủ; đầu đèn xa đo thực tế — nếu ≥12×12px: label=traffic_light với state và shape tốt nhất có thể thấy; nếu <12px: không tạo box
-Rationale: Mục 1 — threshold 12×12px. Mục 5 — đèn phương tiện trong scope dù nhỏ/xa vẫn phải label nếu đủ kích thước.
-Common mistake: Label đèn xa <12px; hoặc bỏ qua tất cả đèn xa không cần đo kích thước.
-Diversity: small_far, occlusion
+Sample: 000008 (sample_id)
+Scene: Hai traffic-light head giống nhau được treo ở hai phía của cùng một giá đỡ; cả hai đang hiển thị đỏ và có bộ đếm số bên trong housing.
+Observation: Hai housing có cấu trúc gần như giống nhau, đều có bóng tròn đỏ và hiển thị số đếm.
+Decision: LABEL
+Expected: Tạo 2 bounding box độc lập, mỗi box bao một housing. Cả hai: class=traffic_light, state=red, shape=circle. Với mỗi instance, phải gán `relevance` độc lập theo traffic flow. Nếu evidence trong ảnh cho thấy cả hai cùng điều khiển luồng ego → cả hai phải được gán `relevance=ego_lane`.
+Rationale: Hai object giống nhau về hình dạng và trạng thái nhưng vẫn là hai instance vật lý độc lập. Cùng state không tự động quyết định relevance, nhưng không được bỏ relevance khi ảnh đã đủ evidence để xác định ego flow.
+Common mistake: Gộp hai housing thành một box lớn; bỏ relevance; hoặc cho rằng cùng state thì relevance tự động giống nhau mà không kiểm tra traffic flow.
+Diversity: multiple_instances / geometry / relevance
 
 ---
 
 CASE ID: EC-09
-Sample: BDD04 (calibration)
-Scene: Partly cloudy daytime city street — đèn đang ở pha chuyển tiếp
-Observation: Một đầu đèn vàng (yellow) đang sáng; bên cạnh có đèn đỏ của làn rẽ đang bật.
-Decision: LABEL cả hai instance riêng biệt
-Expected: đầu đèn vàng ego_lane: state=yellow, relevance=ego_lane; đầu đèn đỏ rẽ: state=red, relevance=other_lane
-Rationale: Yellow là trạng thái hợp lệ theo taxonomy. Annotator hay nhầm yellow=unknown vì pha ngắn.
-Common mistake: Gán state=unknown cho đèn vàng (yellow rõ ràng không nên dùng unknown); gộp 2 đèn vào 1 box.
-Diversity: ambiguity (yellow state), conflict (hai pha cùng lúc)
+Sample: 000009 (sample_id)
+Scene: Ở phía xa có một cụm gồm 3 traffic-light housing riêng biệt.
+Observation: Trong cụm 3 housing, 2 đèn đang hiển thị xanh và 1 housing tắt hoàn toàn.
+Decision: LABEL / IGNORE tùy kích thước và evidence của từng instance
+Expected: Mỗi housing độc lập được đánh giá và annotate riêng. Nếu từng housing đạt `12×12 px` và đủ evidence: tạo 3 bounding box riêng; 2 instance có `state=green`, 1 instance có `state=off`. Gán `relevance` độc lập cho từng instance theo traffic flow. Nếu một housing <12×12 px → IGNORE instance đó; không suy ra state/relevance từ hai đèn còn lại.
+Rationale: Case này kiểm tra multiple instances, state độc lập, phân biệt `off` với `unknown`, threshold 12×12 px và relevance độc lập. Không được xử lý cả cụm như một object hoặc suy ra trạng thái của một đèn từ các đèn bên cạnh.
+Common mistake: Gộp 3 housing thành một box; cho rằng cả 3 cùng state vì 2 đèn đang xanh; gán `unknown` cho đèn rõ ràng đang tắt; hoặc annotate đèn quá nhỏ chỉ vì vẫn nhìn thấy điểm sáng.
+Diversity: multiple_instances / off / green / relevance / small_far
 
 ---
 
 CASE ID: EC-10
-Sample: BDD01 (calibration)
-Scene: Partly cloudy daytime highway — đèn bị cắt ở mép ảnh
-Observation: Một đầu đèn ở góc trên phải ảnh bị viền hình cắt ngang ~40% phần trên.
-Decision: LABEL — vẽ box ôm phần còn trong khung hình
-Expected: label=traffic_light; box ôm phần nằm bên trong ảnh, cạnh box tiếp giáp mép ảnh; state theo phần nhìn thấy; relevance theo bối cảnh
-Rationale: Mục 6 — truncation: vẽ box theo phần trong khung. Không bỏ qua object hợp lệ chỉ vì bị cắt.
-Common mistake: Bỏ qua object bị cắt mép; hoặc kéo box ra ngoài giới hạn ảnh.
-Diversity: occlusion (truncation)
-
----
+Sample: 000007 (sample_id)
+Scene: Hai traffic-light head màu xanh ở hai phía của cùng đoạn đường, phía dưới có nhiều phương tiện và biển báo giao thông.
+Observation: Hai tín hiệu có hình dạng tương tự nhau, đều màu xanh; khoảng cách và vị trí khác nhau khiến annotator có thể không chắc chúng là hai instance độc lập hay một tín hiệu nhìn ở các vị trí khác nhau.
+Decision: LABEL
+Expected: Mỗi housing nhìn thấy độc lập được tạo một bounding box riêng. Không gộp hai housing. Nếu cả hai đều điều khiển cùng traffic flow của ego → cả hai có thể có relevance=ego_lane; relevance không phải thuộc tính duy nhất cho toàn bộ ảnh.
+Rationale: Một giao lộ có thể có nhiều traffic-light head cùng phục vụ một traffic flow. Instance identity phải dựa trên housing vật lý, không dựa trên việc các đèn có cùng state/relevance.
+Common mistake: Chỉ annotate một traffic light vì cho rằng các đèn còn lại là duplicate hoặc gán other_lane cho một đèn chỉ vì nó nằm bên trái/phải ego.
+Diversity: multiple_instances / ambiguity / geometry

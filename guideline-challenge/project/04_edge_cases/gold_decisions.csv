@@ -1,16 +1,22 @@
 sample_id,decision_id,expected,severity,rationale
-BDD13,d1,label=traffic_light count=2,major,hai đầu đèn nhìn thấy rõ trong khung hình - đếm thiếu là lỗi major vì model bỏ sót object
-BDD13,d2,relevance=ego_lane (đèn thẳng phía trước),critical,đèn điều khiển trực tiếp làn xe chủ - gán sai thành other_lane sẽ khiến AEB không kích hoạt khi đèn đỏ
-BDD13,d3,geometry: box ôm sát vỏ đèn nhìn thấy ±2px,minor,theo mục 3 guideline - box không được bao quầng sáng hay chân đế
-BDD17,d1,label=traffic_light count≥1,major,đèn vẫn nhìn thấy trong mưa - annotator dễ bỏ sót vì điều kiện tầm nhìn kém
-BDD17,d2,state=red hoặc green (phân biệt được) hoặc unknown (nếu mưa làm mờ hoàn toàn màu),major,màu đèn phải xác định được dù trời mưa - nếu không thấy rõ thì state=unknown; chỉ dùng off khi xác định được cả cụm đèn tắt hẳn
-BDD17,d3,geometry: box ôm phần vỏ đèn nhìn thấy không kéo theo vệt nước mưa,minor,vệt mưa trên kính hoặc flare mưa không thuộc vỏ đèn - không gộp vào box
-BDD18,d1,label=traffic_light count≥2,critical,ban đêm có halo/glare nhưng đầu đèn vẫn phải label - bỏ sót là critical escape vì AEB mất tín hiệu điều khiển
-BDD18,d2,geometry: box căn theo kích thước vỏ đèn thực tế không bao trọn quầng sáng lóa,critical,theo mục 6 guideline - box phình to theo glare là lỗi geometry critical vì làm sai kích thước object cho detector
-BDD18,d3,state=red hoặc green (nếu nhìn thấy bóng sáng rõ) hoặc unknown (nếu chỉ thấy quầng sáng trắng) - KHÔNG dùng off vì đèn đang sáng,major,ban đêm màu bị wash-out: nếu không phân biệt được thì unknown (đèn đang hoạt động nhưng không đọc được màu); off chỉ khi tắt hẳn
-BDD18,d4,relevance=ego_lane hoặc ambiguous (tùy bối cảnh làn),major,ban đêm mất vạch kẻ đường dễ gây ambiguity - phải gán ambiguous nếu không rõ làn nào đèn điều khiển
-BDD24,d1,label=traffic_light count≥1,major,tuyết che phủ nhưng đèn vẫn phải nhìn thấy được khi sáng - annotator hay bỏ sót vì cảnh tuyết phân tán chú ý
-BDD24,d2,state=red hoặc green hoặc unknown (không đoán qua tuyết) - KHÔNG dùng off vì đèn vẫn sáng,major,tuyết khuếch tán ánh sáng làm mờ màu - phải dùng unknown khi không đủ bằng chứng; off chỉ khi xác định được cả cụm đèn tắt hẳn
-BDD25,d1,label=traffic_light count≥1,major,dawn/dusk có đèn đường và bầu trời sáng có thể che khuất đèn - không được bỏ sót
-BDD25,d2,relevance=ambiguous (nếu vạch làn không rõ do ánh sáng nghiêng),critical,ánh sáng dawn/dusk chiếu xéo xóa vạch kẻ đường - bắt buộc dùng ambiguous không đoán ego_lane hay other_lane
-BDD25,d3,state khác unknown nếu nhìn thấy màu đèn qua ánh sáng vàng bầu trời; dùng off nếu xác định được tắt hẳn,minor,dawn/dusk thay đổi màu nền nhưng bóng đèn sáng vẫn nhận diện được màu - không dùng unknown khi thấy rõ
+000000,d1,"LABEL; 2 traffic_light boxes riêng biệt, cùng màu đỏ nhưng khác traffic flow","major","Hai đầu đèn có thể cùng màu nhưng điều khiển các hướng khác nhau; gộp thành 1 box hoặc gán cùng relevance là sai."
+000000,d2,"Đèn mũi tên: shape=arrow, relevance=other_lane; đèn tròn: shape=circle, relevance=ego_lane","critical","Nếu xác định nhầm tín hiệu rẽ trái là ego_lane thì downstream sẽ sai quyết định nhường/không nhường."
+000001,d1,"LABEL với các box chỉ bao phần housing nhìn thấy","major","Một phần housing bị cây hoặc phương tiện che không làm object mất tính chất traffic_light nếu còn đủ evidence."
+000001,d2,"Nếu màu không rõ: state=unknown; không đoán phần bị che","major","Không được tự suy đoán màu trong vùng bị che; chỉ label khi có bằng chứng rõ ràng."
+000002,d1,"LABEL; mỗi housing là một instance riêng","major","Guideline yêu cầu mỗi đầu đèn vật lý là 1 instance, không gộp một gantry thành 1 box."
+000002,d2,"Không gộp nhiều housing trong cùng gantry; state/shape/relevance phải phân biệt theo từng box","major","Nếu gộp nhiều đèn vào 1 box, model sẽ mất thông tin về direction và color của từng signal."
+000003,d1,"LABEL hoặc IGNORE dựa trên kích thước thực tế","major","Ngưỡng 12×12 px là ràng buộc bắt buộc theo guideline; object quá nhỏ không được annotate."
+000003,d2,"Không label các điểm sáng ở xa nếu không đủ evidence và size","minor","Mục tiêu là loại object quá nhỏ khỏi dataset để tránh false positive."
+000004,d1,"LABEL từng housing riêng lẻ theo instance","major","Các housing có thể cùng trạng thái nhưng vẫn là những object độc lập."
+000004,d2,"state=green cho đèn đang sáng; state=off cho housing tắt hoàn toàn; state=unknown khi không đủ evidence","major","Phân biệt rõ off và unknown là yếu tố then chốt trong edge case này."
+000005,d1,"LABEL; 2 traffic_light instances riêng biệt","major","Cần phân biệt rõ giữa đèn rẽ trái đỏ và đèn đi thẳng xanh để không gán nhầm signal control."
+000005,d2,"Đèn rẽ trái: state=red, shape=arrow, relevance=other_lane; đèn đi thẳng: state=green, shape=circle, relevance=ego_lane","critical","Đây là critical-risk case do hai trạng thái đối nghịch nằm trên cùng trụ. Sai relevance = sai hành vi an toàn."
+000006,d1,"LABEL nếu còn đủ evidence; ESCALATE nếu không đủ bằng chứng xác minh","major","Case này nằm ở ranh giới giữa partial occlusion và insufficient evidence."
+000006,d2,"Không dựa vào một vùng sáng mà không có housing / signal structure rõ ràng","major","Không được tạo object chỉ vì thấy một điểm sáng xanh; phải có bằng chứng về traffic_light."
+000007,d1,"LABEL cả 2 housing nếu mỗi housing có đủ evidence","major","Không được coi 2 object giống nhau là duplicate."
+000007,d2,"Relevance không phải do màu sắc; phải đánh giá theo lane/traffic flow thực tế","major","Dựa trên cùng màu xanh không thể suy ra cùng relevance nếu traffic flow khác nhau."
+000007,d3,"Nếu không xác định được traffic flow thì relevance=ambiguous","critical","Khi không đủ evidence, quy tắc an toàn là ambiguity không được đoán mò."
+000008,d1,"LABEL; tạo 2 box độc lập cho 2 housing","major","Hai housing trên cùng giá đỡ là 2 object riêng, không được gộp thành 1 box."
+000008,d2,"Nếu cả hai cùng điều khiển luồng ego thì relevance=ego_lane cho cả hai; không suy ra luôn theo vị trí gần xa","major","Relevance là thuộc tính của từng signal, không phải của cả cụm."
+000009,d1,"LABEL 3 housing riêng lẻ nếu đủ evidence và kích thước","critical","Một cụm 3 housing không thể được gộp thành 1 box; model cần biết mỗi signal riêng lẻ."
+000009,d2,"2 housing sáng xanh = state=green; 1 housing tắt = state=off; nếu không đủ evidence thì unknown","critical","Sự chênh lệch giữa on/off và unknown cần được xác định đúng từng instance."
