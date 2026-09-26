@@ -1,1 +1,16 @@
 sample_id,decision_id,expected,severity,rationale
+BDD13,d1,label=traffic_light count=2,major,hai đầu đèn nhìn thấy rõ trong khung hình - đếm thiếu là lỗi major vì model bỏ sót object
+BDD13,d2,relevance=ego_lane (đèn thẳng phía trước),critical,đèn điều khiển trực tiếp làn xe chủ - gán sai thành other_lane sẽ khiến AEB không kích hoạt khi đèn đỏ
+BDD13,d3,geometry: box ôm sát vỏ đèn nhìn thấy ±2px,minor,theo mục 3 guideline - box không được bao quầng sáng hay chân đế
+BDD17,d1,label=traffic_light count≥1,major,đèn vẫn nhìn thấy trong mưa - annotator dễ bỏ sót vì điều kiện tầm nhìn kém
+BDD17,d2,state=red hoặc green (phân biệt được) hoặc unknown (nếu mưa làm mờ hoàn toàn màu),major,màu đèn phải xác định được dù trời mưa - nếu không thấy rõ thì state=unknown; chỉ dùng off khi xác định được cả cụm đèn tắt hẳn
+BDD17,d3,geometry: box ôm phần vỏ đèn nhìn thấy không kéo theo vệt nước mưa,minor,vệt mưa trên kính hoặc flare mưa không thuộc vỏ đèn - không gộp vào box
+BDD18,d1,label=traffic_light count≥2,critical,ban đêm có halo/glare nhưng đầu đèn vẫn phải label - bỏ sót là critical escape vì AEB mất tín hiệu điều khiển
+BDD18,d2,geometry: box căn theo kích thước vỏ đèn thực tế không bao trọn quầng sáng lóa,critical,theo mục 6 guideline - box phình to theo glare là lỗi geometry critical vì làm sai kích thước object cho detector
+BDD18,d3,state=red hoặc green (nếu nhìn thấy bóng sáng rõ) hoặc unknown (nếu chỉ thấy quầng sáng trắng) - KHÔNG dùng off vì đèn đang sáng,major,ban đêm màu bị wash-out: nếu không phân biệt được thì unknown (đèn đang hoạt động nhưng không đọc được màu); off chỉ khi tắt hẳn
+BDD18,d4,relevance=ego_lane hoặc ambiguous (tùy bối cảnh làn),major,ban đêm mất vạch kẻ đường dễ gây ambiguity - phải gán ambiguous nếu không rõ làn nào đèn điều khiển
+BDD24,d1,label=traffic_light count≥1,major,tuyết che phủ nhưng đèn vẫn phải nhìn thấy được khi sáng - annotator hay bỏ sót vì cảnh tuyết phân tán chú ý
+BDD24,d2,state=red hoặc green hoặc unknown (không đoán qua tuyết) - KHÔNG dùng off vì đèn vẫn sáng,major,tuyết khuếch tán ánh sáng làm mờ màu - phải dùng unknown khi không đủ bằng chứng; off chỉ khi xác định được cả cụm đèn tắt hẳn
+BDD25,d1,label=traffic_light count≥1,major,dawn/dusk có đèn đường và bầu trời sáng có thể che khuất đèn - không được bỏ sót
+BDD25,d2,relevance=ambiguous (nếu vạch làn không rõ do ánh sáng nghiêng),critical,ánh sáng dawn/dusk chiếu xéo xóa vạch kẻ đường - bắt buộc dùng ambiguous không đoán ego_lane hay other_lane
+BDD25,d3,state khác unknown nếu nhìn thấy màu đèn qua ánh sáng vàng bầu trời; dùng off nếu xác định được tắt hẳn,minor,dawn/dusk thay đổi màu nền nhưng bóng đèn sáng vẫn nhận diện được màu - không dùng unknown khi thấy rõ

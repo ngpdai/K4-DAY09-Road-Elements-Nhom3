@@ -1,1 +1,14 @@
 sample_id,split,tags,reason
+BDD01,calibration,normal,traffic light daytime highway - baseline agreement check
+BDD02,calibration,normal,traffic light daytime city street - baseline agreement check
+BDD03,calibration,normal,traffic light overcast highway - baseline agreement check
+BDD04,calibration,edge,traffic light daytime city street - relevance ambiguity test
+BDD05,calibration,normal,traffic light daytime highway - count agreement check
+BDD06,example,normal,clear daytime highway - straightforward ego_lane case for guideline illustration
+BDD07,example,edge,overcast highway - multiple lights in frame edge case
+BDD08,example,edge,clear daytime highway - occlusion/relevance ambiguity illustration
+BDD13,blind,normal,clear daytime city street - standard multi-light scenario
+BDD17,blind,edge;low_visibility,rainy daytime city street - reduced visibility affects state detection
+BDD18,blind,critical;low_visibility,clear night city street - glare/halo geometry + relevance ambiguity under low light
+BDD24,blind,edge;low_visibility,snowy daytime city street - state detection under snow glare
+BDD25,blind,ambiguity;edge,clear dawn/dusk city street - ambiguous relevance due to borderline lighting
