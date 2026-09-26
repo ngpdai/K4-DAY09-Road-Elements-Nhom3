@@ -34,4 +34,4 @@ Trong file export CVAT (định dạng Datumaro / CVAT XML), mọi quyết đị
 - **ESCALATE:** Class `traffic_light` với attribute `relevance = ambiguous`.
 
 ## Dữ liệu và giới hạn
-Sử dụng 20 ảnh có đèn giao thông từ nguồn (https://www.kaggle.com/datasets/sovitrath/s2tld-720x1280-traffic-light-detection-xml-format/data) 
+Sử dụng 10 trong số 20 ảnh có đèn giao thông từ nguồn (https://www.kaggle.com/datasets/sovitrath/s2tld-720x1280-traffic-light-detection-xml-format/data) 
