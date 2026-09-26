@@ -3,8 +3,8 @@
 Điền trước phút 15. Thay mọi placeholder; còn sót thì `make status` báo ở gate G1.
 
 - **Team:** team03
-- **Nhóm peer test bài của mình:** TODO (cặp A ↔ B; số nhóm lẻ thì ring 3 nhóm A → B → C → A — Lab Coach công bố)
-- **Nhóm mình test bài của:** TODO
+- **Nhóm peer test bài của mình:** teamG04T031
+- **Nhóm mình test bài của:** teamG04T031
 - **Problem family:** Traffic light (state, relevance, direction)
 - **Nguồn ảnh:** Lấy 10 mẫu ảnh từ trên mạng (https://www.kaggle.com/datasets/sovitrath/s2tld-720x1280-traffic-light-detection-xml-format/data)
 
